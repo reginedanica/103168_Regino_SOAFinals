@@ -48,15 +48,29 @@
 			var monthMy = age.charAt(0);
 			monthMy = monthMy + age.charAt(1);
 			
+			var dayMy = age.charAt(3);
+			dayMy = dayMy + age.charAt(4);
+			
 			var currentTime = new Date();
 			var month = currentTime.getMonth() + 1;
+			
+			var day = currentTime.getDate()
+			var thisYear = currentTime.getFullYear();
+			
 			if ( monthMy <= month )
 			{
-				yearMy = 2013 - yearMy;
+				if ( dayMy <= day )
+				{
+					yearMy = thisYear - yearMy;
+				}
+				else
+				{
+					yearMy = thisYear - yearMy + 1;
+				}
 			}
 			else
 			{
-				yearMy = 2013 - yearMy + 1;
+				yearMy = thisYear - yearMy + 1;
 			}
 			
 			$("#content").append("<h3>AGE:</h3>" + yearMy);
@@ -102,13 +116,14 @@
 			$("#content").append("<h3>BIRTHDAY:</h3>" + bday);
 			
 			//TRY LATER WITHOUT ANY LANGUAGES
-			var interests = data["interests"]["data"];
+			var interests = data["interests"];
 			if (!interests)
 			{
 				$("#content").append("<h3>INTERESTS:</h3>" + "N/A");
 			}
 			else
 			{
+				interests = data["interests"]["data"];
 				$("#content").append("<h3> INTERESTS: </h3>");
 				$(interests).each(function(i)
 				{
@@ -125,13 +140,14 @@
 			
 			
 			//PICTURES
-			var recentPics = data["photos"]["data"];
+			var recentPics = data["photos"];
 			if (!recentPics)
 			{
 				$("#content").append("<h3>PICTURES:</h3>" + "N/A");
 			}
 			else
 			{		
+				recentPics = data["photos"]["data"];
 				$("#content").append("<h3>PICTURES:</h3>");
 				$(recentPics).each(function(i)
 				{
@@ -144,13 +160,14 @@
 				});
 			}
 			
-			var coverPhoto = data["cover"]["source"];
+			var coverPhoto = data["cover"];
 			if (!coverPhoto)
 			{
 				$("#content").append("<h3>COVER PHOTO:</h3>" + "N/A");
 			}
 			else
 			{
+				coverPhoto = data["cover"]["source"];
 				$("#content").append("<h3>COVER PHOTO:</h3>");
 				var cover ="<img src="+ coverPhoto + ">";
 				$("#content").append("<br>" + cover + "</br>");						
@@ -184,40 +201,6 @@
 				relationshipStatus = "N/A";
 			}
 			$("#content").append("<h3>RELATIONSHIP STATUS:</h3>" + relationshipStatus);
-		});
-		
-		$("#my_button").click(function () 
-		{
-			$.getJSON(url, function(data) 
-			{
-				var albums = data["albums"]["data"];
-				$("#content").append("<h3>ALBUMS:</h3>");
-				var newDD = $("<select/>");
-				$(albums).each(function(i)
-				{
-					$(newDD).append("<option>" +albums[i]["name"]+ "</option>");
-					$("#content").append(newDD);
-				});
-				
-				$("#display").click(function () 
-				{	
-					var conceptName = $(newDD).find(":selected").text();
-					$(albums).each(function(i)
-					{
-						if (albums[i]["name"] == conceptName)
-						{
-							var u = albums[i]["photos"]["data"];
-							$(u).each(function(i)
-							{
-								var picz ="<img src="+ u[i]["picture"] + ">";
-								$("#content").append(picz);
-							});							
-						}
-					});
-					
-				});
-			});
-			
 		});
 	});
 	</script>
